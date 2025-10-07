@@ -26,10 +26,10 @@ pip install -r requirements.txt
 ```
 OPENAI_API_KEY=your_openai_api_key
 DB_USER=arsa
-DB_PASSWORD=arsa1984@
-DB_HOST=127.0.0.1
+DB_PASSWORD=arsakalhor
+DB_HOST=db
 DB_PORT=5432
-DB_NAME=chetchat_db
+DB_NAME=mydb_utf8
 ```
 
 4. جداول را ایجاد کنید:

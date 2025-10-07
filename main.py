@@ -1,45 +1,59 @@
+
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 import os
-import openai
+from fastapi import Query
 from typing import Dict, Any
-
 from models import Message
-from database import get_db
+from database import get_db , engine
 from routers import pdf
+from routers import chat
+from openai import OpenAI
+from fastapi.openapi.utils import get_openapi
 
+from auth import models
+from auth.routes import router as auth_router
+
+
+models.Base.metadata.create_all(bind=engine)
 # بارگذاری .env
 load_dotenv()
 
 # راه‌اندازی FastAPI
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:8000"],
+
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["Content-Type", "Authorization"]
+)
+
+
+app.include_router(pdf.router, prefix="/api/pdf")
 # بارگذاری مسیرها
-app.include_router(pdf.router)
+app.include_router(chat.router, prefix="/api/chat")
 
-# استاتیک و قالب‌ها
+app.include_router(auth_router)
+
+
+
+
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
-# کلید API و مدل
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise RuntimeError("OPENAI_API_KEY is not set in .env file")
-openai.api_key = OPENAI_API_KEY
-OPENAI_MODEL = "gpt-3.5-turbo"
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-
-@app.get("/", response_class=HTMLResponse)
-def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
-@app.post("/api/chat")
-async def chat(request: Request, db: Session = Depends(get_db)):
+@app.post("/api/chat_message")
+async def chat_bot(request: Request, db: Session = Depends(get_db)):
     try:
         data = await request.json()
         message = data.get("message")
@@ -48,14 +62,14 @@ async def chat(request: Request, db: Session = Depends(get_db)):
             return JSONResponse(status_code=400, content={"error": "پیامی ارسال نشده است."})
 
         # تماس با OpenAI
-        response = openai.ChatCompletion.create(
-            model=OPENAI_MODEL,
+        response = client.chat.completions.create(
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": "شما یک ربات پشتیبانی هستید."},
                 {"role": "user", "content": message}
             ]
         )
-        reply = response["choices"][0]["message"]["content"]
+        reply = response.choices[0].message.content
 
         # ذخیره پیام در دیتابیس
         db_message = Message(user_message=message, bot_reply=reply)
@@ -67,6 +81,8 @@ async def chat(request: Request, db: Session = Depends(get_db)):
 
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
 
 
 @app.get("/api/health")
@@ -119,12 +135,43 @@ def get_messages(db: Session = Depends(get_db)):
 
 
 
+@app.get("/chat-history")
+def get_chat_history(filename: str = Query(...), db: Session = Depends(get_db)):
+    messages = db.query(Message).filter(Message.filename == filename).order_by(Message.created_at).all()
+    return [
+        {
+            "user": m.user_message,
+            "bot": m.bot_reply,
+            "timestamp": m.created_at.isoformat()
+        } for m in messages
+    ]
 
 
 
 
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Vexta API",
+        version="1.0.0",
+        description="API for authentication and PDF tools",
+        routes=app.routes,
+    )
+    openapi_schema["components"]["securitySchemes"] = {
+        "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+    for path in openapi_schema["paths"].values():
+        for method in path.values():
+            method["security"] = [{"BearerAuth": []}]
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
 
-
+app.openapi = custom_openapi
 
 
 

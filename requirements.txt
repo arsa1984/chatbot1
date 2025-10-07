@@ -1,7 +1,33 @@
-fastapi==0.104.1
-uvicorn==0.24.0
-sqlalchemy==2.0.23
+# FastAPI و سرور ASGI
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# دیتابیس
+SQLAlchemy==2.0.31
 psycopg2-binary==2.9.9
-python-dotenv==1.0.0
-openai==1.3.0
-jinja2==3.1.2
+
+# مدیریت کانفیگ و محیط
+python-dotenv==1.0.1
+
+# Migration
+alembic==1.13.2
+
+# امنیت و رمزنگاری
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+bcrypt==4.0.1
+
+# PDF پردازش
+PyMuPDF==1.24.6
+tiktoken==0.7.0
+
+
+# OpenAI API
+openai==1.35.14
+httpx==0.27.2
+
+# ابزارهای کمکی
+pydantic[email]==2.8.2
+requests==2.32.3
+numpy>=1.26,<2.3
+python-docx

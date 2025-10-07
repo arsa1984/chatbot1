@@ -23,3 +23,13 @@ try:
     conn.close()
 except Exception as e:
     print(f"❌ Error connecting to database: {e}")
+
+
+
+    from sqlalchemy import create_engine
+
+DATABASE_URL = "postgresql://postgres:yourpassword@localhost:5432/chetchat_db"
+engine = create_engine(DATABASE_URL)
+conn = engine.connect()
+print("✅ اتصال موفق بود")
+

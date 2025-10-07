@@ -1,19 +1,27 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="fa">
 <head>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <meta charset="UTF-8" />
-  <title>چت‌بات با PDF</title>
-  <link rel="stylesheet" href="/static/style.css?v=2">
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+  <title>Vexta </title>
+  
+
+  <link rel="stylesheet" href="/static/css/style.css?v=3" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="container">
-    <h1>چت‌بات PDF</h1>
-    
+    <h1>Vexta</h1>
+
+
     <!-- قسمت آپلود PDF -->
     <div class="upload-section">
       <h2>آپلود فایل PDF</h2>
-      <input type="file" id="pdfFile" accept=".pdf" style="display: none;">
+      <select id="filename" name="filename">
+  <option value="">فایلی را انتخاب کنید</option>
+</select>
+
+      <input type="file" id="pdfFile" accept=".pdf" style="display: none;" />
       <label for="pdfFile" class="upload-btn">آپلود فایل PDF</label>
       <div id="pdfStatus" class="status-message"></div>
     </div>
@@ -21,86 +29,21 @@
     <!-- قسمت چت -->
     <div class="chat-section">
       <div id="chat-box" class="chat-box"></div>
+
       <div class="input-section">
         <textarea id="message" placeholder="پیامت رو بنویس..."></textarea>
         <button onclick="sendMessage()" class="send-btn">ارسال</button>
+        <div id="loading" class="loading-spinner" style="display: none;"></div>
       </div>
+
+      <button onclick="clearChat()" class="clear-chat-btn">پاک کردن چت</button>
     </div>
   </div>
 
-  <script>
-    // آپلود فایل PDF
-    document.getElementById('pdfFile').addEventListener('change', async function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const response = await fetch('/upload-pdf/', {
-          method: 'POST',
-          body: formData
-        });
-
-        const data = await response.json();
-        if (data.error) {
-          throw new Error(data.error);
-        }
-
-        document.getElementById('pdfStatus').textContent = `فایل ${file.name} با موفقیت آپلود شد!`;
-        document.getElementById('pdfStatus').className = 'status-message success';
-      } catch (error) {
-        document.getElementById('pdfStatus').textContent = `خطا در آپلود فایل: ${error.message}`;
-        document.getElementById('pdfStatus').className = 'status-message error';
-      }
-    });
-
-    // ارسال پیام
-    async function sendMessage() {
-      const msg = document.getElementById("message").value;
-      const chatBox = document.getElementById("chat-box");
-
-      if (!msg.trim()) return;
-
-      // پیام کاربر
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.innerText = msg;
-      chatBox.appendChild(userMsg);
-
-      document.getElementById("message").value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      try {
-        const response = await fetch("/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: msg })
-        });
-
-        const data = await response.json();
-        const reply = data.reply || data.error || "خطا در پاسخ";
-
-        const botMsg = document.createElement("div");
-        botMsg.className = "message bot";
-        botMsg.innerText = reply;
-        chatBox.appendChild(botMsg);
-
-        chatBox.scrollTop = chatBox.scrollHeight;
-      } catch (e) {
-        const errorMsg = document.createElement("div");
-        errorMsg.className = "message bot";
-        errorMsg.innerText = "خطا در ارتباط با سرور";
-        chatBox.appendChild(errorMsg);
-      }
-    }
-  </script>
+  <script src="/static/js/script.js"></script>
 </body>
 </html>
 
 
 
-
+ -->
