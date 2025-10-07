@@ -1,0 +1,32 @@
+{
+  "name": "vexta",
+  "version": "1.0.0",
+  "description": "این یک اپلیکیشن چت است که از FastAPI و OpenAI برای پاسخگویی به کاربران استفاده می‌کند.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --no-lint",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arsa1984/chetchat-new.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arsa1984/chetchat-new/issues"
+  },
+  "homepage": "https://github.com/arsa1984/chetchat-new#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^4.1.8"
+  },
+  "dependencies": {
+    "framer-motion": "^12.12.2",
+    "lucide-react": "^0.511.0"
+  }
+}

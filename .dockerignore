@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+.venv/
+
+# Node.js
+node_modules/
+my-next-app/.next/
+my-next-app/node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Env
+.env
+.env.*
