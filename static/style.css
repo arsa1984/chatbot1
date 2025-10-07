@@ -7,53 +7,71 @@ body {
     text-align: right;
     color: #333;
   }
-  
+
   h1 {
     color: #222;
     text-align: center;
     margin-bottom: 2rem;
   }
-  
+
   .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     background-color: white;
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  
-  textarea {
-    width: 100%;
-    height: 100px;
-    padding: 1rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    resize: none;
-    margin-top: 1rem;
-    box-sizing: border-box;
+
+  .upload-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
   }
-  
-  button {
-    background-color: #4CAF50;
-    color: white;
+
+  .upload-section h2 {
+    color: #495057;
+    margin-bottom: 1.5rem;
+  }
+
+  .upload-btn {
+    display: inline-block;
     padding: 0.8rem 1.5rem;
-    border: none;
+    background-color: #007bff;
+    color: white;
     border-radius: 8px;
-    font-size: 1rem;
     cursor: pointer;
-    margin-top: 1rem;
-    width: 100%;
     transition: background-color 0.3s ease;
   }
-  
-  button:hover {
-    background-color: #45a049;
+
+  .upload-btn:hover {
+    background-color: #0056b3;
   }
-  
+
+  .status-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .status-message.success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .status-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .chat-section {
+    margin-top: 2rem;
+  }
+
   .chat-box {
-    height: 300px;
+    height: 400px;
     overflow-y: auto;
     margin-bottom: 1rem;
     background-color: #f1f1f1;
@@ -63,7 +81,39 @@ body {
     flex-direction: column;
     gap: 0.75rem;
   }
-  
+
+  .input-section {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  textarea {
+    flex: 1;
+    min-height: 100px;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+    box-sizing: border-box;
+  }
+
+  .send-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .send-btn:hover {
+    background-color: #45a049;
+  }
+
   .message {
     padding: 0.8rem 1rem;
     border-radius: 12px;
@@ -71,16 +121,15 @@ body {
     line-height: 1.5;
     word-wrap: break-word;
   }
-  
+
   .user {
     background-color: #DCF8C6;
     align-self: flex-end;
     text-align: right;
   }
-  
+
   .bot {
     background-color: #E6E6E6;
     align-self: flex-start;
     text-align: left;
   }
-  

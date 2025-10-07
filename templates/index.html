@@ -2,19 +2,61 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8" />
-  <title>چت‌بات با Groq</title>
+  <title>چت‌بات با PDF</title>
   <link rel="stylesheet" href="/static/style.css?v=2">
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>  chet chat </h1>
-    <div id="chat-box" class="chat-box"></div>
-    <textarea id="message" placeholder="پیامت رو بنویس..."></textarea>
-    <button onclick="sendMessage()">ارسال</button>
+    <h1>چت‌بات PDF</h1>
+    
+    <!-- قسمت آپلود PDF -->
+    <div class="upload-section">
+      <h2>آپلود فایل PDF</h2>
+      <input type="file" id="pdfFile" accept=".pdf" style="display: none;">
+      <label for="pdfFile" class="upload-btn">آپلود فایل PDF</label>
+      <div id="pdfStatus" class="status-message"></div>
+    </div>
+
+    <!-- قسمت چت -->
+    <div class="chat-section">
+      <div id="chat-box" class="chat-box"></div>
+      <div class="input-section">
+        <textarea id="message" placeholder="پیامت رو بنویس..."></textarea>
+        <button onclick="sendMessage()" class="send-btn">ارسال</button>
+      </div>
+    </div>
   </div>
 
   <script>
+    // آپلود فایل PDF
+    document.getElementById('pdfFile').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/upload-pdf/', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        document.getElementById('pdfStatus').textContent = `فایل ${file.name} با موفقیت آپلود شد!`;
+        document.getElementById('pdfStatus').className = 'status-message success';
+      } catch (error) {
+        document.getElementById('pdfStatus').textContent = `خطا در آپلود فایل: ${error.message}`;
+        document.getElementById('pdfStatus').className = 'status-message error';
+      }
+    });
+
+    // ارسال پیام
     async function sendMessage() {
       const msg = document.getElementById("message").value;
       const chatBox = document.getElementById("chat-box");
@@ -58,3 +100,7 @@
   </script>
 </body>
 </html>
+
+
+
+
